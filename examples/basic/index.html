@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>CanvasGL Basic Example</title>
+    <script type='module' src="basic.js" charset="utf-8" defer></script>
+  </head>
+  <body>
+    <canvas id="basicCanvas" width="600" height="400"></canvas>
+    <script id='fragmentCode' type="x-shader/x-fragment" >
+      #version 100
+      #define PI 3.141592653589793
+      precision mediump float;
+
+        uniform float u_Time;
+       varying vec2 uv;
+        void main() {
+          gl_FragColor = vec4(uv.x+sin(u_Time/10.), uv.y, cos(u_Time/2.), 1.0);
+        }
+
+    </script>
+    <script id='vertexCode' type="x-shader/x-vertex">
+      #version 100
+      precision mediump float;
+      attribute vec2 a_Position;
+      attribute vec2 a_UV;
+
+       varying vec2 uv;
+       void main(void) {
+          uv = a_UV;
+          gl_Position = vec4(a_Position, 0, 1);
+
+       }
+
+    </script>
+  </body>
+</html>
