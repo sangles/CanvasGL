@@ -1,6 +1,6 @@
 import CanvasGL from '../../src/CanvasGL.js';
 
-let demo = new CanvasGL({canvas:'basicCanvas',version:1,prefix:'u_'});
+let demo = new CanvasGL({canvas:'basicCanvas',compatibility:'shadertoy',version:1,prefix:'u_'});
 demo.setBackground(125,0,0);
 
 const vsSource = CanvasGL.getCode('vertexCode');
