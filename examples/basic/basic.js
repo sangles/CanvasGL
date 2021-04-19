@@ -23,13 +23,15 @@ demo.addUniforms(
     'u_dist': CanvasGL.VEC2
   }
 );
-
+// demo.addTexture('demo','../textures/BlenderSplashPow2.jpeg');
+demo.addTexture('demo');
 
 demo.update('u_mode',2);
 demo.update('u_dist',[0.9,-0.9]);
 let img = new Image();
 img.onload = ()=>{
-  demo.addTexture('demo',img);
+  demo.updateTexture('demo',img);
+  // demo.addTexture('demo',img);
 }
 img.src = '../textures/BlenderSplashPow2.jpeg';
 // img.src = '../textures/GardelPow2.jpeg';
