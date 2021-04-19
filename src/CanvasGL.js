@@ -31,6 +31,9 @@ export default class CanvasGL {
     // if(canvasId) this.canvas = document.getElementById(canvasId);
     this.attributes = {};
     this.uniforms = {};
+    this.textures = {};
+    this.images = {};
+    this.renders = new Array();
     this.setup(props?.canvas)
   }
 
@@ -157,6 +160,7 @@ export default class CanvasGL {
     // this.webgl.bindBuffer(gl.ARRAY_BUFFER, this.data)
     // this.webgl.enableVertexAttribArray(this.uvAttribute)
     // this.webgl.vertexAttribPointer(this.uvAttribute, this.size, this.webgl.FLOAT, false, 0, 0)
+    this.renders.push(()=>this.renderFillPlane());
   }
 
   compile(){
@@ -184,6 +188,7 @@ export default class CanvasGL {
 
     this.webgl.bindBuffer(this.webgl.ARRAY_BUFFER, null);
     this.webgl.bindBuffer(this.webgl.ELEMENT_ARRAY_BUFFER, null);
+
   }
 
   // uniform vec3 iResolution;
@@ -206,18 +211,53 @@ export default class CanvasGL {
     this.uniforms.time = this.webgl.getUniformLocation(this.program, "u_Time");
   }
 
+  addTexture( name, image ){
 
+    // this.texturesIds.push(name);// = {texture:this.webgl.createTexture(),key:name,id:this.textures};
+    this.images[name] = {texture:this.webgl.createTexture(), key:name, id:Object.keys(this.images).length, src:image.src };
+    this.webgl.bindTexture(this.webgl.TEXTURE_2D, this.images[name].texture);
+    this.webgl.texImage2D(this.webgl.TEXTURE_2D, 0, this.webgl.RGBA, this.webgl.RGBA, this.webgl.UNSIGNED_BYTE, image);
+    // this.webgl.generateMipmap(this.webgl.TEXTURE_2D);
+    // this.uniformTexture = this.webgl.getUniformLocation(this.program, 'diffuse')
+
+    // this.webgl.texParameteri(this.webgl.TEXTURE_2D, this.webgl.TEXTURE_MAG_FILTER, this.webgl.LINEAR);
+    // this.webgl.texParameteri(this.webgl.TEXTURE_2D, this.webgl.TEXTURE_MIN_FILTER, this.webgl.LINEAR);
+
+    this.textures[name] = this.webgl.getUniformLocation(this.program, name);
+        // this.program.diffuse = this.webgl.getUniformLocation(this.program, "diffuse");
+        // this.program.diffuse2 = this.webgl.getUniformLocation(this.program, "diffuse2");
+    // this.texturesUni.push = [this.program.diffuse,this.program.diffuse2];
+    this.webgl.generateMipmap(this.webgl.TEXTURE_2D);
+    this.webgl.texParameteri(this.webgl.TEXTURE_2D, this.webgl.TEXTURE_MAG_FILTER, this.webgl.LINEAR_MIPMAP_NEAREST);//_MIPMAP_NEAREST);
+    this.webgl.texParameteri(this.webgl.TEXTURE_2D, this.webgl.TEXTURE_MIN_FILTER, this.webgl.LINEAR_MIPMAP_NEAREST);//_MIPMAP_NEAREST);
+
+    this.webgl.bindTexture(this.webgl.TEXTURE_2D,null);
+
+
+
+  }
+  bindTextures(){
+    for(let key in this.images){
+      let texture = this.images[key];
+      this.webgl.activeTexture(this.webgl['TEXTURE' + texture.id])
+      this.webgl.bindTexture(this.webgl.TEXTURE_2D, texture.texture)
+      this.webgl.uniform1i(texture.name, texture.id);
+    }
+  }
+  bindUniforms(time){
+    // Uniforms
+    this.webgl.uniform1f( this.uniforms.time, time/1000. );
+  }
   render(time){
     if(!this.program){
       this.compile();
     }
     this.clear();
     this.webgl.useProgram( this.program );
-
-    // Uniforms
-    this.webgl.uniform1f( this.uniforms.time, time/1000. );
-
-    this.renderFillPlane();
+    this.bindUniforms(time);
+    this.bindTextures();
+    this.renders.forEach((ren) => ren())
+    // this.renderFillPlane();
 
   }
 

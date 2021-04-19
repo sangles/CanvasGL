@@ -12,5 +12,12 @@ demo.setShaders({
   fragment:fsSource
 });
 
+let img = new Image();
+img.onload = ()=>{
+  demo.addTexture('demo',img);
+}
+img.src = '../textures/BlenderSplashPow2.jpeg';
+// img.src = '../textures/GardelPow2.jpeg';
+
 demo.createFillPlane();
 demo.play();
