@@ -4,10 +4,11 @@ precision mediump float;
 
 uniform float u_Time;
 uniform sampler2D demo;
+
 varying vec2 uv;
 
 void main() {
-  vec4 col = texture(demo, uv);
+  vec2 nUV= vec2(sin(u_Time+uv.x*PI)*.5+.5,cos(u_Time+uv.y*PI)*.5+.5)*.2;
+  vec4 col = texture2D(demo, uv+nUV);
   gl_FragColor = col;
-  //vec4(uv.x+sin(u_Time/10.), uv.y, cos(u_Time/2.), 1.0);
 }
