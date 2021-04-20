@@ -1,0 +1,35 @@
+{
+  "name": "canvasgl",
+  "version": "0.0.1",
+  "description": "A small WebGL 2d Canvas powered by GLSL shaders.",
+  "main": "index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/sangles/CanvasGL.git"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "keywords": [
+    "WebGL",
+    "Canvas",
+    "Shaders",
+    "GLSL",
+    "HTML5",
+    "VisualFX",
+    "WebDev"
+  ],
+  "author": "Santiago Anglés",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sangles/CanvasGL/issues"
+  },
+  "homepage": "https://github.com/sangles/CanvasGL#readme"
+}
