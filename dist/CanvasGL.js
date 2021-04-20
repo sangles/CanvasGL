@@ -1,18 +1,13 @@
-'use strict'
-
 // let getTime = ()=>{
 //   return (new Date()).getTime();
 // }
 let point = (p)=>{
   return [p.x*2-1,-p.y*2+1]
-}
-let triangle = (p1,p2,p3)=>{
-  return [...point(p1),...point(p2),...point(p3)];
-}
+};
 let plane = (p1,p2,p3,p4)=>{
   // return [...triangle(p1,p2,p4),...triangle(p2,p3,p4)];
   return [...point(p1),...point(p2),...point(p3),...point(p4)];
-}
+};
 const InternalProperties = {
   default:{
     time:'u_Time',
@@ -22,8 +17,8 @@ const InternalProperties = {
     time:'iTime',
     resolution:'iResolution'
   }
-}
-export default class CanvasGL {
+};
+class CanvasGL {
 
   running = false;
   fragmentCode = '';
@@ -68,7 +63,7 @@ export default class CanvasGL {
     this.images = {};
     this.renders = new Array();
     this.internals = (props.compatibility&&InternalProperties[props.compatibility])?InternalProperties[props.compatibility]:InternalProperties.default;
-    this.setup(props?.canvas)
+    this.setup(props?.canvas);
   }
 
   setup(canvas=null){
@@ -101,9 +96,9 @@ export default class CanvasGL {
     this.webgl.compileShader(this.vertexShader);
 
     if (!this.webgl.getShaderParameter(this.vertexShader, this.webgl.COMPILE_STATUS)) {
-      console.error(this.webgl.getShaderInfoLog(this.vertexShader))
-      console.error(this.webgl.getShaderInfo(this.vertexShader))
-      console.error(this.webgl.glGetProgramInfoLog(this.program))
+      console.error(this.webgl.getShaderInfoLog(this.vertexShader));
+      console.error(this.webgl.getShaderInfo(this.vertexShader));
+      console.error(this.webgl.glGetProgramInfoLog(this.program));
       throw new Error('Vertex Shader compiler error')
     }
   }
@@ -115,9 +110,9 @@ export default class CanvasGL {
     this.webgl.compileShader(this.fragmentShader);
 
     if (!this.webgl.getShaderParameter(this.fragmentShader, this.webgl.COMPILE_STATUS)) {
-      console.error(this.webgl.getShaderInfoLog(this.fragmentShader))
-      console.error(this.webgl.getShaderInfo(this.fragmentShader))
-      console.error(this.webgl.glGetProgramInfoLog(this.program))
+      console.error(this.webgl.getShaderInfoLog(this.fragmentShader));
+      console.error(this.webgl.getShaderInfo(this.fragmentShader));
+      console.error(this.webgl.glGetProgramInfoLog(this.program));
       throw new Error('Fragment Shader compiler error')
     }
   }
@@ -128,7 +123,7 @@ export default class CanvasGL {
   }
 
   createShaderProgram(){
-    this.program = this.webgl.createProgram()
+    this.program = this.webgl.createProgram();
     this.webgl.attachShader(this.program, this.vertexShader);
     this.webgl.attachShader(this.program, this.fragmentShader);
     this.webgl.linkProgram(this.program);
@@ -185,9 +180,8 @@ export default class CanvasGL {
     let pBR = { x:1, y:1 };
     let planeArr = plane(pTL,pTR,pBR,pBL);
     let UVArr = [0,0,1,0,1,1,0,1];
-    let planeIndex = [0,1,2,];
 
-    this.fillVBuffer = this.createVertexBuffer(planeArr)
+    this.fillVBuffer = this.createVertexBuffer(planeArr);
     this.fillIBuffer = this.createIndexBuffer([0,1,3,1,2,3]);
     this.fillUVBuffer = this.createVertexBuffer(UVArr);
     this.renders.push(()=>this.renderFillPlane());
@@ -305,9 +299,9 @@ export default class CanvasGL {
       tempImg.onload = ()=> this.updateTexture(name,tempImg);
       tempImg.src = image;
     }else if(image instanceof Image){
-      this.updateTexture(name,image)
+      this.updateTexture(name,image);
     }else if(image==null){
-      this.setColorTexture(name)
+      this.setColorTexture(name);
     }else {
       this.setColorTexture(name,[255,0,0,255]);
     }
@@ -334,8 +328,8 @@ export default class CanvasGL {
     for(let key in this.images){
       let texture = this.images[key];
       if(this.textures[key]==undefined) this.textures[key] = this.webgl.getUniformLocation(this.program, key);
-      this.webgl.activeTexture(this.webgl['TEXTURE' + texture.id])
-      this.webgl.bindTexture(this.webgl.TEXTURE_2D, texture.texture)
+      this.webgl.activeTexture(this.webgl['TEXTURE' + texture.id]);
+      this.webgl.bindTexture(this.webgl.TEXTURE_2D, texture.texture);
       this.webgl.uniform1i(texture.name, texture.id);
     }
   }
@@ -359,8 +353,8 @@ export default class CanvasGL {
     let uniform = this.uniforms[key];
     uniform.value = value;
     if(uniform.location!='unlinked'){
-      this.updateUniform(key)
-    }else{
+      this.updateUniform(key);
+    }else {
       if(this.program){
         this.uniforms.location = this.webgl.getUniformLocation(this.program, "u_"+key);
         this.updateUniform(key);
@@ -392,3 +386,5 @@ export default class CanvasGL {
   }
 
 }
+
+export default CanvasGL;
