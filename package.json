@@ -2,7 +2,7 @@
   "name": "canvasgl",
   "version": "0.0.1",
   "description": "A small WebGL 2d Canvas powered by GLSL shaders.",
-  "main": "index.js",
+  "main": "dist/index.js",
   "directories": {
     "example": "examples"
   },
@@ -14,8 +14,7 @@
     "url": "git+ssh://git@github.com/sangles/CanvasGL.git"
   },
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "keywords": [
     "WebGL",
