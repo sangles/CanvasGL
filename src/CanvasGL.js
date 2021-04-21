@@ -68,7 +68,7 @@ export default class CanvasGL {
     this.images = {};
     this.renders = new Array();
     this.internals = (props.compatibility&&InternalProperties[props.compatibility])?InternalProperties[props.compatibility]:InternalProperties.default;
-    this.setup(props?.canvas)
+    this.setup(props.canvas)
   }
 
   setup(canvas=null){
