@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>CanvasGL Basic Example</title>
+    <script type='module' src="multiple.js" charset="utf-8" defer></script>
+  </head>
+  <body>
+    <canvas id="basicCanvas" width="600" height="400"></canvas>
+    <script id='fragmentCode' type="x-shader/x-fragment" >
+      #version 100
+      #define PI 3.141592653589793
+      precision mediump float;
+
+      uniform float u_Time;
+      uniform int u_mode;
+      uniform vec2 u_dist;
+      uniform float u_transition;
+      uniform sampler2D demo;
+      uniform sampler2D demo2;
+
+      varying vec2 uv;
+
+      void main() {
+        vec2 nUV= vec2(sin(u_Time+uv.x*PI)*.5+.5,cos(u_Time+uv.y*PI)*.5+.5)*.2;
+        vec4 col = texture2D(demo, uv);//uv*u_dist+nUV);
+        gl_FragColor = mix(col,texture2D(demo2,uv),uv.x*uv.x);
+      }
+    </script>
+    <script id='vertexCode' type="x-shader/x-vertex">
+      #version 100
+      precision mediump float;
+      attribute vec2 a_Position;
+      attribute vec2 a_UV;
+
+       varying vec2 uv;
+       void main(void) {
+          uv = a_UV;
+          gl_Position = vec4(a_Position, 0, 1);
+
+       }
+
+    </script>
+  </body>
+</html>
