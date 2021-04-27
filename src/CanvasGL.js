@@ -60,6 +60,7 @@ export default class CanvasGL {
 
   constructor(props={}){
     // if(canvasId) this.canvas = document.getElementById(canvasId);
+    this.linked = true;
     this.attributes = {};
     this.uniforms = {};
     this.uniformUpdaters = {};
@@ -70,7 +71,7 @@ export default class CanvasGL {
     this.internals = (props.compatibility&&InternalProperties[props.compatibility])?InternalProperties[props.compatibility]:InternalProperties.default;
     this.setup(props.canvas)
   }
-
+  
   setup(canvas=null){
     if(typeof canvas == 'string'){
       this.canvas = document.getElementById(canvas);
@@ -93,7 +94,12 @@ export default class CanvasGL {
   logic(){
 
   }
-
+  detach(){
+    this.linked = false;
+  }
+  attach(){
+    this.linked = true;
+  }
   setVertexShader(source){
     this.vertexSource = source;
     this.vertexShader = this.webgl.createShader(this.webgl.VERTEX_SHADER);
@@ -381,7 +387,7 @@ export default class CanvasGL {
 
   loop(time){
     this.logic(time);
-    this.render(time);
+    if(this.linked) this.render(time);
     if(this.running) requestAnimationFrame((t)=>this.loop(t));
   }
 
