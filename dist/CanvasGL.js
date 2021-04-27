@@ -380,8 +380,10 @@ class CanvasGL {
   }
 
   play(){
-    this.running = true;
-    this.loop();
+    if(!this.running){
+      this.running = true;
+      this.loop();
+    }
   }
 
   stop(){
